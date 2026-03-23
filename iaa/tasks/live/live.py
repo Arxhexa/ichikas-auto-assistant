@@ -124,7 +124,8 @@ def start_auto_live(
             device,
             R.Live.TextLife.template.pixels,
             debug=debug_enabled,
-            stop_check=R.Live.TextScoreRank.exists
+            stop_check=R.Live.TextScoreRank.exists,
+            max_fps=60.0
         )
         analyzer.run()
     else:

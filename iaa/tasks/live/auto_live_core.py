@@ -15,11 +15,13 @@ class RhythmGameAnalyzer:
     BASE_WIDTH = 1280
     BASE_HEIGHT = 720
 
-    def __init__(self, device: Device, life_img, num_lanes=6, debug_frame=None, stop_check=None, debug=False):
+    def __init__(self, device: Device, life_img, num_lanes=6, debug_frame=None, stop_check=None, debug=False, max_fps=60.0):
         self.device = device
         self.debug_frame = debug_frame
         self.stop_check = stop_check
         self.debug = debug
+        self.max_fps = max_fps
+        self.frame_interval = 1.0 / max_fps
         
         # 加载 LIFE 图像用于检测是否在 live 界面
         self.LIFE = life_img
@@ -231,6 +233,10 @@ class RhythmGameAnalyzer:
                             for i in range(self.num_lanes):
                                 self.device.multi_touch.multi_touch_up(0, 0, i)
                         cv2.waitKey(0)
+            elapsed = time.time() - t0
+            remaining = self.frame_interval - elapsed
+            if remaining > 0:
+                time.sleep(remaining)
             
         if self.device:
             for i in range(self.num_lanes):
